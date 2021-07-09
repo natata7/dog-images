@@ -10,13 +10,15 @@
     "prebuild": "npm run lint",
     "lint:fix": "eslint --cache --ext .ts . --fix",
     "lint": "eslint --cache --ext .ts .",
-    "server:watch": "ts-node-dev --respawn --transpile-only src/index.ts"
+    "server:watch": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "initdb": "ts-node src/db/initdb"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^16.0.1",
+    "@types/pg": "^8.6.1",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "eslint": "^7.30.0",
@@ -29,9 +31,13 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "fs-extra": "^10.0.0",
     "node-fetch": "^2.6.1",
+    "pg": "^8.6.0",
+    "pg-promise": "^10.10.2",
     "pug": "^3.0.2"
   }
 }

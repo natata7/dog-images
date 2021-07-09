@@ -1,0 +1,20 @@
+html(lang="en")
+  head
+    title= title
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+  body
+    div.container
+      h1.header= message
+      for item in results
+        div.row
+            div( class="col s1")
+                p= item.id
+            div( class="col s6")
+                img(src= item.url style='margin:auto' width="200px")
+            div( class="col s3")
+                p Size: 
+                p.width= item.width
+                p.height= item.height
+            div( class="col s2")
+                a(href="/list/dog/images/remove/"+item.id class="waves-effect waves-light btn-small") Delete
