@@ -2,7 +2,7 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "outDir": "dist",
-        "baseUrl": ".",
-        "resolveJsonModule": true
+        "baseUrl": "src",
+        "resolveJsonModule": true,
     }
 }

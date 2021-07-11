@@ -7,10 +7,6 @@ import pgPromise from 'pg-promise';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-interface DataImage {
-  fileSizeBytes: number,
-  url: string
-}
 const url = process.env.URL;
 console.log(url);
 
@@ -53,8 +49,6 @@ export const register = (app: express.Express): void => {
       { ...req.body });
       res.json({ id });
     } catch (err) {
-      // tslint:disable-next-line:no-console
-      console.error(err);
       res.json({ error: err.message || err });
     }
   });
@@ -74,11 +68,8 @@ export const register = (app: express.Express): void => {
                     , height
                 FROM    images
                 ORDER BY id`);
-      console.log(images);
       res.json(images);
     } catch (err) {
-      // tslint:disable-next-line:no-console
-      console.error(err);
       res.json({ error: err.message || err });
     }
   });
