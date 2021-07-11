@@ -75,8 +75,25 @@ export const register = (app: express.Express): void => {
                 FROM    images
                 ORDER BY id`);
       console.log(images);
+      return res.json( images );
+    } catch (err) {
+      // tslint:disable-next-line:no-console
+      console.error(err);
+      res.json({ error: err.message || err });
+    }
+  });
+
+  app.get('/list/dog/images/view', async (req: any, res) => {
+    try {
+      const images = await db.any(`
+                SELECT
+                    id
+                    , url
+                    , width
+                    , height
+                FROM    images
+                ORDER BY id`);
       res.render('list', { results: images });
-      // return res.json(images);
     } catch (err) {
       // tslint:disable-next-line:no-console
       console.error(err);

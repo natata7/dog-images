@@ -4,17 +4,30 @@ html(lang="en")
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css')
     link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
   body
-    div.container
-      h1.header= message
-      for item in results
-        div.row
-            div( class="col s1")
-                p= item.id
-            div( class="col s6")
-                img(src= item.url style='margin:auto' width="200px")
-            div( class="col s3")
-                p Size: 
-                p.width= item.width
-                p.height= item.height
-            div( class="col s2")
-                a(href="/list/dog/images/remove/"+item.id class="waves-effect waves-light btn-small") Delete
+  include partials/nav
+  div( style="min-height:calc( 100vh - 64px)")
+    div( style="min-height:calc( 100vh - 64px)" class = "valign-wrapper")
+        if results 
+            div( class = "container collection")
+                div( class = "row collection-item")
+                        div( class="col s1")
+                            p ID
+                        div( class="col s4")
+                            p Thumbs
+                        div( class="col s5")
+                            p Size
+                        div( class="col s2")
+
+                for item in results
+                    div( class = "row collection-item")
+                        div( class="col s1")
+                            p= item.id
+                        div( class="col s4")
+                            img(src= item.url style='margin:auto' width="100px")
+                        div( class="col s5")
+                            p Size: 
+                            span.width= item.width
+                            span x
+                            span.height= item.height
+                        div( class="col s2")
+                            a(href="/list/dog/images/remove/"+item.id class="waves-effect waves-light btn-small") Delete
