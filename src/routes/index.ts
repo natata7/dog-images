@@ -28,6 +28,7 @@ export const register = (app: express.Express): void => {
     host: process.env.PGHOST,
     port,
     user: process.env.PGUSER,
+    ssl: true,
   };
 
   const pgp = pgPromise();
