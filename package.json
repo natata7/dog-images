@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "tsc && npm run copy-assets",
     "start": "node .",
     "prebuild": "npm run lint",
     "lint:fix": "eslint --cache --ext .ts . --fix",
@@ -13,7 +13,8 @@
     "server:watch": "ts-node-dev --respawn --transpile-only src/index.ts",
     "initdb": "ts-node src/db/initdb",
     "dev:start": "npm-run-all build start",
-    "dev": "nodemon --watch src -e ts --exec npm run dev:start"
+    "dev": "nodemon --watch src -e ts --exec npm run dev:start",
+    "copy-assets": "cp -rv src/views/ dist/views/"
   },
   "author": "",
   "license": "ISC",
