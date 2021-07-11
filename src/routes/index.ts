@@ -24,11 +24,10 @@ async function sendRequest() {
 export const register = (app: express.Express): void => {
   const port = parseInt(process.env.PGPORT, 10);
   const config = {
-    database: process.env.PGDATABASE,
-    host: process.env.PGHOST,
-    port,
-    user: process.env.PGUSER,
-    ssl: true,
+    connectionString: process.env.PGSTRING,
+    ssl: {
+      rejectUnauthorized: false
+    }
   };
 
   const pgp = pgPromise();
