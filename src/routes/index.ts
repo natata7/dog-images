@@ -51,7 +51,7 @@ export const register = (app: express.Express): void => {
                 VALUES( $[url], $[width], $[height])
                 RETURNING id;`,
       { ...req.body });
-      return res.json({ id });
+      res.json({ id });
     } catch (err) {
       // tslint:disable-next-line:no-console
       console.error(err);
@@ -75,7 +75,7 @@ export const register = (app: express.Express): void => {
                 FROM    images
                 ORDER BY id`);
       console.log(images);
-      return res.json( images );
+      res.json(images);
     } catch (err) {
       // tslint:disable-next-line:no-console
       console.error(err);
@@ -108,7 +108,7 @@ export const register = (app: express.Express): void => {
                 FROM    images
                 WHERE   id = $[id]`,
       { id: req.params.id }, (r) => r.rowCount);
-      return res.json({ id });
+      res.json({ id });
     } catch (err) {
       // tslint:disable-next-line:no-console
       console.error(err);
