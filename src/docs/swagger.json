@@ -1,111 +1,169 @@
 {
-  "swagger": "2.0",
-  "info": {
-      "description": "Simple API project",
-      "version": "1.0.0",
-      "title": "Tasks API",
-      "license": {
-          "name": "Apache 2.0",
-          "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-      }
-  },
-  "schemes": ["http"],
-  "host": "localhost:3000",
-  "basePath": "/",
-  "paths" : {
-      "/upload/dog/image" : {
-          "post" : {
-              "summary" : "Save image to db",
-              "description": "Save image to db",
-              "produces": ["application/json"],
-              "parameters": [
-                {
-                  "url": "url",
-                  "width": "width",
-                  "height": "height",
-                  "required": true
-              }
-              ],
-              "responses": {
-                  "201": {
-                      "description": "Created"
-                  }
-              }
-          }
-      },
-      "/list/dog/images" : {
-          "get" : {
-              "summary" : "Get the list of images from db",
-              "description": "Get the list of images from db",
-              "produces": ["application/json"],
-              "consumes": ["application/json"],
-              "parameters": [],
-              "responses": {
-                  "200": {
-                      "description": "successful operation"
-                  },
-                  "400": {
-                    "description": "images was not found"
-                  }
-              }
-          }
-      },
-      "/list/dog/images/view" : {
-        "get" : {
-            "summary" : "View the list of images from db",
-            "description": "View the list of images from db",
-            "produces": ["application/json"],
-            "consumes": ["application/json"],
-            "parameters": [],
-            "responses": {
-                "200": {
-                    "description": "successful operation"
-                },
-                "400": {
-                  "description": "images was not found"
+    "swagger": "2.0",
+    "info": {
+        "description": "Simple API project",
+        "version": "1.0.0",
+        "title": "Tasks API",
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "schemes": [
+        "http"
+    ],
+    "host": "localhost:3000",
+    "basePath": "/",
+    "components": {
+        "schemas": {
+            "Image": {
+                "required": [
+                    "url",
+                    "width",
+                    "height"
+                ],
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "width": {
+                        "type": "string"
+                    },
+                    "height": {
+                        "type": "string"
+                    }
                 }
             }
         }
     },
-      "/list/dog/images/remove/{id}" : {
-          "get" : {
-              "summary" : "Delete image from db",
-              "description": "Delete image from db",
-              "produces": ["application/json"],
-              "parameters": [
-                  {
-                      "name": "id",
-                      "in": "path",
-                      "description": "image id that needs to be deleted",
-                      "required": true,
-                      "type": "string"
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "successful operation"
-                  },
-                  "400": {
-                      "description": "Invalid status value"
-                  }
-              }
-          }
-      },
-      "/image" : {
-          "get" : {
-              "summary" : "Get random image from remote API in web interface",
-              "description": "Get random image from remote API in web interface",
-              "produces": ["application/json"],
-              "parameters": [],
-              "responses": {
-                  "200": {
-                      "description": "successful"
-                  },
-                  "500": {
-                      "description": "Error"
-                  }
-              }
-          }
-      }
-  }
+    "paths": {
+        "/upload/dog/image": {
+            "post": {
+                "summary": "Save image to db",
+                "description": "Save image to db",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Image"
+                            },
+                            "example": {
+                                "url": "Russia",
+                                "width": "100",
+                                "height": "100"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "requesBody",
+                        "name": "body",
+                        "url": "url",
+                        "width": "width",
+                        "height": "height",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/list/dog/images": {
+            "get": {
+                "summary": "Get the list of images from db",
+                "description": "Get the list of images from db",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "images was not found"
+                    }
+                }
+            }
+        },
+        "/list/dog/images/view": {
+            "get": {
+                "summary": "View the list of images from db",
+                "description": "View the list of images from db",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "images was not found"
+                    }
+                }
+            }
+        },
+        "/list/dog/images/remove/{id}": {
+            "get": {
+                "summary": "Delete image from db",
+                "description": "Delete image from db",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "image id that needs to be deleted",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/image": {
+            "get": {
+                "summary": "Get random image from remote API in web interface",
+                "description": "Get random image from remote API in web interface",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "successful"
+                    },
+                    "500": {
+                        "description": "Error"
+                    }
+                }
+            }
+        }
+    }
 }

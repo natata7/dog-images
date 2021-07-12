@@ -1,19 +1,19 @@
 /* eslint-disable import/prefer-default-export */
-import * as express from 'express';
+import express, { Request, Response } from 'express';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import path from 'path';
 import pgPromise from 'pg-promise';
+import * as ImageService from '../images/image.service';
+import { BaseImage } from '../images/image.interface';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const url = process.env.URL;
-console.log(url);
 
 async function sendRequest() {
   const response = await fetch(url);
   const data = await response.json();
-  console.log(data);
   const match = new RegExp(/\.(jpg|JPG|png|PNG|gif|jpeg)/g);
   if (!match.test(data.url)) {
     return sendRequest();
@@ -22,12 +22,12 @@ async function sendRequest() {
 }
 
 export const register = (app: express.Express): void => {
-  const port = parseInt(process.env.PGPORT, 10);
+  // const port = parseInt(process.env.PGPORT, 10);
   const config = {
     connectionString: process.env.PGSTRING,
     ssl: {
-      rejectUnauthorized: false
-    }
+      rejectUnauthorized: false,
+    },
   };
 
   const pgp = pgPromise();
@@ -35,75 +35,56 @@ export const register = (app: express.Express): void => {
 
   app.get('/', (_req: unknown, res) => {
     res.render('index', {
-      title: 'Hey', message: 'Hello there!', getImage: '/image', listImages: '/list/dog/images',
+      title: 'Hey', message: 'Hello there!', getImage: '/image', listImages: '/list/dog/images/view',
     });
   });
 
-  app.post('/upload/dog/image', async (req, res) => {
-    console.log(req.body);
+  app.post('/upload/dog/image', async (req: Request, res: Response) => {
+    console.log(req);
     try {
-      const id = await db.one(`
-                INSERT INTO images( url, width, height )
-                VALUES( $[url], $[width], $[height])
-                RETURNING id;`,
-      { ...req.body });
-      res.json({ id });
+      const item: BaseImage = req.body;
+
+      const newItem = await ImageService.create(item);
+
+      res.status(201).json(newItem);
     } catch (err) {
-      res.json({ error: err.message || err });
+      res.status(500).send(err.message);
     }
   });
 
-  app.get('/image', async (_req, res) => {
+  app.get('/image', async (req: Request, res: Response) => {
     const imageUrl = await sendRequest();
     res.render('image', { getURI: 'Hey', url: imageUrl });
   });
 
-  app.get('/list/dog/images', async (req: any, res) => {
+  app.get('/list/dog/images', async (req: Request, res: Response) => {
     try {
-      const images = await db.any(`
-                SELECT
-                    id
-                    , url
-                    , width
-                    , height
-                FROM    images
-                ORDER BY id`);
-      res.json(images);
+      const images = await ImageService.findAll();
+      res.status(200).json(images);
     } catch (err) {
-      res.json({ error: err.message || err });
+      res.status(500).send(err.message);
     }
   });
 
-  app.get('/list/dog/images/view', async (req: any, res) => {
+  app.get('/list/dog/images/view', async (req: Request, res: Response) => {
     try {
-      const images = await db.any(`
-                SELECT
-                    id
-                    , url
-                    , width
-                    , height
-                FROM    images
-                ORDER BY id`);
+      const images = await ImageService.findAll();
       res.render('list', { results: images });
     } catch (err) {
       // tslint:disable-next-line:no-console
       console.error(err);
-      res.json({ error: err.message || err });
+      res.status(500).send(err.message);
     }
   });
 
-  app.get('/list/dog/images/remove/:id', async (req: any, res) => {
+  app.get('/list/dog/images/remove/:id', async (req: Request, res: Response) => {
     try {
-      const id = await db.result(`
-                DELETE
-                FROM    images
-                WHERE   id = $[id]`,
-      { id: req.params.id }, (r) => r.rowCount);
-      res.json({ id });
+      const id: number = parseInt(req.params.id, 10);
+      await ImageService.remove(id);
+
+      res.status(200).json(id);
     } catch (err) {
-      // tslint:disable-next-line:no-console
-      console.error(err);
-      res.json({ error: err.message || err });
+      res.status(500).send(err.message);
     }
   });
 };
